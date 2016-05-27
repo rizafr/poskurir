@@ -24,14 +24,14 @@ class Login extends CI_Model{
 		if(filter_var($user,FILTER_VALIDATE_EMAIL) == FALSE)
 		{
 			$this->db->select('*')
-					 ->from('users')
+					 ->from('mypos.t_user')
 					 ->where('password',$pass)
 					 ->where('username',$user);
 		}
 		else
 		{
 			$this->db->select('*')
-					 ->from('users')
+					 ->from('mypos.t_user')
 					 ->where('password',$pass)
 					 ->where('email',$user);
 		}
@@ -48,12 +48,12 @@ class Login extends CI_Model{
 	
 	function signup($data)
 	{
-		$this->db->insert('users',$data);
+		$this->db->insert('mypos.t_user',$data);
 	}
 	
 	function activate($status,$code)
 	{
 		$this->db->where('md5(email)',$code);
-		$this->db->update('customers',$status);
+		$this->db->update('mypos.t_pelanggan',$status);
 	}
 }

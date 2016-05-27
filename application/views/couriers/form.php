@@ -98,7 +98,7 @@ function yakin()
 					  <div class="form-group ">
 						  <label for="name" class="control-label col-lg-2">No Telepon <span class="required">*</span></label>
 						  <div class="col-lg-5">
-							  <input class=" form-control" name="phone" type="text" value="<?php echo (isset($edit) ? $get->no_hp_courier : '') ?>" />
+							  <input class=" form-control" name="phone" type="text" value="<?php echo (isset($edit) ? $get->no_telpon : '') ?>" />
 						  </div>
 					  </div>
 				  <br />

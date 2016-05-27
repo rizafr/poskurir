@@ -23,13 +23,32 @@ class Users extends CI_Controller
 	function index()
 	{
 		$data['user'] = $this->crud_user->read();
+		$data['cabang'] = $this->crud_user->get_cabang();
 		$data['param'] = 'users/show';
 		$this->load->view('home',$data);
+	}
+
+	function search()
+	{
+		if($this->input->post('cabang') != ' ')
+		{
+			$data['cabang'] = $this->crud_user->src_cabang($this->input->post('cabang'));
+			$data['user'] = $this->crud_user->read();
+			$data['cabang'] = $this->crud_user->get_cabang();
+			$data['param'] = 'users/show';
+			$data['cbg'] = $this->input->post('cabang');
+			$this->load->view('home',$data);
+		}
+		else
+		{
+			redirect("customer");
+		}
 	}
 	
 	function add_user()
 	{
 		$data['roles'] = $this->crud_user->get_roles();
+		$data['cabang'] = $this->crud_user->get_cabang();
 		$data['param'] = 'users/form';
 		$this->load->view('home',$data);
 	}
@@ -40,8 +59,9 @@ class Users extends CI_Controller
 			'username' => $this->input->post('user'),
 			'password' => md5($this->input->post('pass1')),
 			'email' => $this->input->post('email'),
-			'name' => $this->input->post('name'),
+			'nama' => $this->input->post('nama'),
 			'role_id' => $this->input->post('role'),
+			'id_grup' => $this->input->post('id_grup'),
 			'status' => 1,
 		);
 		
@@ -95,7 +115,9 @@ class Users extends CI_Controller
 	
 	function edit($id)
 	{
-		$data['user'] = $this->crud_user->get_data($id,'users','id');
+		$data['user'] = $this->crud_user->get_data($id,'mypos.t_user','id');
+		$data['cabang'] = $this->crud_user->get_cabang();
+
 		$data['param'] = 'users/form';
 		$data['roles'] = $this->crud_user->get_roles();
 		$data['edit'] = 1;
@@ -110,6 +132,7 @@ class Users extends CI_Controller
 			'email' => $this->input->post('email'),
 			'name' => $this->input->post('name'),
 			'role_id' => $this->input->post('role'),
+			'id_grup' => $this->input->post('id_grup'),
 			'status' =>1,
 		);
 		

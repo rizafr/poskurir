@@ -59,10 +59,10 @@ class Primary extends CI_Controller{
                     'username' => $data['result']->username,
                     'password' => $data['result']->password,
                     'email' => $data['result']->email,
-                    'name' => $data['result']->name,
+                    'nama' => $data['result']->nama,
                     'role' => $data['result']->role_id,
                     'status' => $data['result']->status,
-                    'id' => $data['result']->id,
+                   // 'id' => $data['result']->id,
                 );
 
                 $this->session->set_userdata($session);

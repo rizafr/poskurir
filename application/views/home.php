@@ -157,6 +157,14 @@
                           <li><a class="" href="<?php echo base_url(""); ?>users/roles">Roles Data</a></li>
                       </ul>
                   </li>
+
+				 <li>
+                      <a class="" href="<?php echo base_url(""); ?>cabang">
+                          <i class="icon_document_alt"></i>
+                          <span>Group Kantor</span>
+                      </a>
+                  </li>
+
                   <li>
                       <a class=""  href="<?php echo base_url(""); ?>customer" class="">
                           <i class="icon_document_alt"></i>

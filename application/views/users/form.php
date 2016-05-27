@@ -82,7 +82,7 @@ function yakin()
 					  <div class="form-group ">
 						  <label for="name" class="control-label col-lg-2">Nama <span class="required">*</span></label>
 						  <div class="col-lg-5">
-							  <input class=" form-control" name="name" type="text" value="<?php echo (isset($edit) ? $get->name : '') ?>" />
+							  <input class=" form-control" name="nama" type="text" value="<?php echo (isset($edit) ? $get->nama : '') ?>" />
 						  </div>
 					  </div>
 					  <div class="form-group ">
@@ -96,6 +96,21 @@ function yakin()
 								echo "<option value='$data->role_id' ".(isset($edit) ? ($get->role_id == $data->role_id ? 'selected' : '') : '')." >$data->rolename</option>";
 							  }
 							  ?>
+						  </select>
+						  </div>
+					  </div>
+
+					  <div class="form-group ">
+						  <label for="name" class="control-label col-lg-2">Grup Kantor<span class="required">*</span></label>
+						  <div class="col-lg-5">
+						  <select class="form-control m-bot15" name='id_grup'>
+							  <option value=''>Pilih</option>
+							  <?php
+							  foreach($cabang as $data2)
+							  {
+								echo "<option value='$data2->id_grup' ".(isset($cbg) ? ($get->id_grup == $data2->id_grup ? 'selected' : '') : '')." >$data2->nama_grup</option>";
+							  }
+							 ?>
 						  </select>
 						  </div>
 					  </div>

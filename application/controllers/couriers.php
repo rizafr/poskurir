@@ -22,7 +22,7 @@ class Couriers extends CI_Controller
 
 	function index()
 	{
-		$data['couriers'] = $this->crud_courier->read('couriers');
+		$data['couriers'] = $this->crud_courier->read('mypos.t_master_kurir');
 		$data['param'] = 'couriers/show';
 		$this->load->view('home',$data);
 	}
@@ -41,13 +41,13 @@ class Couriers extends CI_Controller
             'password' => md5($this->input->post('pass1')),
 			'alamat' => $this->input->post('address'),
 			'email' => $this->input->post('email'),
-			'no_hp_courier' => $this->input->post('phone'),
+			'no_telpon' => $this->input->post('phone'),
 			//'login_state' => '1',
 		);
 		
 		$email = $this->crud_courier->look($this->input->post('email'),'email');
 		$nip = $this->crud_courier->look($this->input->post('nip'),'courier_id');
-		$phone = $this->crud_courier->look($this->input->post('phone'),'no_hp_courier');
+		$phone = $this->crud_courier->look($this->input->post('phone'),'no_telpon');
 		
 		if($email > 0)
 		{
@@ -81,7 +81,7 @@ class Couriers extends CI_Controller
 		}
 		else
 		{
-			if(!$this->crud_courier->create('couriers',$data))
+			if(!$this->crud_courier->create('mypos.t_master_kurir',$data))
 			{
 				$msg = array(
 					'status' => 1,
@@ -106,7 +106,7 @@ class Couriers extends CI_Controller
 	
 	function edit($id)
 	{
-		$data['courier'] = $this->crud_courier->get_courier($id,'courier_id','couriers');
+		$data['courier'] = $this->crud_courier->get_courier($id,'courier_id','mypos.t_master_kurir');
 		$data['param'] = 'couriers/form';
 		$data['edit'] = 1;
 		$this->load->view('home',$data);
@@ -120,13 +120,13 @@ class Couriers extends CI_Controller
 			'alamat' => $this->input->post('address'),
             'password' => md5($this->input->post('pass1')),
 			'email' => $this->input->post('email'),
-			'no_hp_courier' => $this->input->post('phone'),
+			'no_telpon' => $this->input->post('phone'),
 		);
 		
 		$id = $this->input->post('id');
 		$email = $this->crud_courier->look2($id,$this->input->post('email'),'email');
 		$nip = $this->crud_courier->look2($id,$this->input->post('nip'),'courier_id');
-		$phone = $this->crud_courier->look2($id,$this->input->post('phone'),'no_hp_courier');
+		$phone = $this->crud_courier->look2($id,$this->input->post('phone'),'no_telpon');
 		
 		if($email > 0)
 		{
@@ -160,7 +160,7 @@ class Couriers extends CI_Controller
 		}
 		else
 		{
-			if(!$this->crud_courier->update($id,'courier_id',$data,'couriers'))
+			if(!$this->crud_courier->update($id,'courier_id',$data,'mypos.t_master_kurir'))
 			{
 				$msg = array(
 					'status' => 1,
@@ -186,7 +186,7 @@ class Couriers extends CI_Controller
 	
 	function delete($id)
 	{
-		if(!$this->crud_courier->delete($id,'courier_id','couriers'))
+		if(!$this->crud_courier->delete($id,'courier_id','mypos.t_master_kurir'))
 		{
 			$msg = array(
 				'status' => 1,
@@ -316,13 +316,13 @@ class Couriers extends CI_Controller
 			'password' => md5(123456),
 			'alamat' => 'rancabolang',
 			'email' => 'haha@haha.lol',
-			'no_hp_courier' => '0000000000',
+			'no_telpon' => '0000000000',
 			'foto' => $gbr,
 			'longlat' => $latlong,
 			//'login_state' => '1',
 		);
 		
-		if(!$this->crud_courier->create('couriers',$data))
+		if(!$this->crud_courier->create('mypos.t_master_kurir',$data))
 		{
 			echo 1;
 		}

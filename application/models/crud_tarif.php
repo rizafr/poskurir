@@ -72,7 +72,7 @@ class Crud_tarif extends CI_Model
 	function get_status($id)
 	{
 		$this->db->select('status_delv_id')
-				 ->from('orders')
+				 ->from('mypos.t_transaksi_order')
 				 ->where('order_id',$id);
 		$get = $this->db->get();
 		
@@ -96,14 +96,14 @@ class Crud_tarif extends CI_Model
 		
 		$this->db->where('courier_id',$id)
 				 ->where('status_delv_id','1')
-				 ->update('orders',$data);
+				 ->update('mypos.t_transaksi_order',$data);
 		
 	}
 	
 	function get_stat($id)
 	{
 		$this->db->select('*')
-				 ->from('orders')
+				 ->from('mypos.t_transaksi_order')
 				 ->where('courier_id',$id)
 				 ->where('status_delv_id',0)
 				 ->where('status_assign',0);
@@ -123,7 +123,7 @@ class Crud_tarif extends CI_Model
 	function cek_order($id)
 	{
 		$this->db->select('*')
-				 ->from('orders')
+				 ->from('mypos.t_transaksi_order')
 				 ->where('order_id',$id);
 		$get = $this->db->get();
 

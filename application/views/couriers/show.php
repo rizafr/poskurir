@@ -80,7 +80,7 @@
 							<td>'.$data->courier_id.'</td>
 							<td>'.$data->nama.'</td>
 							<td>'.$data->alamat.'</td>
-							<td>'.$data->no_hp_courier.'</td>
+							<td>'.$data->no_telpon.'</td>
 							<td>'.$data->email.'</td>
                             <td>'.(($data->login_state == 0) ? 'Non Aktif' : 'Aktif').'</td>
 							<td>

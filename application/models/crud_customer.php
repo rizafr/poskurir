@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of usersModel
+ * Description of mypos.t_userModel
  *
  * @author Sumapala Technologies
  */
@@ -21,9 +21,9 @@ class Crud_customer extends CI_Model
     
 	function read()
 	{
-		$this->db->select('users.*, user_roles.rolename')
-				 ->from('users')
-				 ->join('user_roles','user_roles.role_id = users.role_id');
+		$this->db->select('mypos.t_user.*, mypos.t_user_roles.rolename')
+				 ->from('mypos.t_user')
+				 ->join('mypos.t_user_roles','mypos.t_user_roles.role_id = mypos.t_user.role_id');
 		$get = $this->db->get();
 		
 		return $get->result();
@@ -33,7 +33,7 @@ class Crud_customer extends CI_Model
 	function get_login($email, $password)
 	{
 		$this->db->select('*')
-				 ->from('customers')
+				 ->from('mypos.t_pelanggan')
                  ->where('email', $email)
                  ->where('password', md5($password));
 		$get = $this->db->get();
@@ -44,7 +44,7 @@ class Crud_customer extends CI_Model
     
     function activate($hash)
     {
-        $sql = "UPDATE customers SET status = '1' WHERE MD5( email ) = '".$hash."'";
+        $sql = "UPDATE mypos.t_pelanggan SET status = '1' WHERE MD5( email ) = '".$hash."'";
         $this->db->query($sql);
     }
 	
@@ -55,7 +55,7 @@ class Crud_customer extends CI_Model
     
     function getstatus($hash)
     {
-        $sql = "select status from customers where MD5(email) = '".$hash."'";
+        $sql = "select status from mypos.t_pelanggan where MD5(email) = '".$hash."'";
         $query = $this->db->query($sql);
         $row = $query->row_array();
         //echo $row['status'];
@@ -64,7 +64,7 @@ class Crud_customer extends CI_Model
     
     function get_login($email)
     {
-        $sql = "select status from customers where email = '".$email."'";
+        $sql = "select status from mypos.t_pelanggan where email = '".$email."'";
         $query = $this->db->query($sql);
         $row = $query->row_array();
         //echo $row['status'];
@@ -73,7 +73,7 @@ class Crud_customer extends CI_Model
     
     function logged_in($email)
     {
-        $sql = "UPDATE customers SET login_state = '1' WHERE email = '".$email."'";
+        $sql = "UPDATE mypos.t_pelanggan SET login_state = '1' WHERE email = '".$email."'";
         $this->db->query($sql);
     }
 	
@@ -94,7 +94,7 @@ class Crud_customer extends CI_Model
 	function look_user($user)
 	{
 		$this->db->where('username',$user);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -103,7 +103,7 @@ class Crud_customer extends CI_Model
 	{
 		$this->db->where('username',$user);
 		$this->db->where_not_in('id',$id);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -111,7 +111,7 @@ class Crud_customer extends CI_Model
 	function look_email($email)
 	{
 		$this->db->where('email',$email);
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->num_rows();
 	}
@@ -120,7 +120,7 @@ class Crud_customer extends CI_Model
 	{
 		$this->db->where('email',$email);
 		$this->db->where_not_in('id',$id);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -134,7 +134,7 @@ class Crud_customer extends CI_Model
 	function look_name($name)
 	{
 		$this->db->where('rolename',$name);
-		$get = $this->db->get('user_roles')->num_rows();
+		$get = $this->db->get('mypos.t_user_roles')->num_rows();
 		
 		return $get;
 	}
@@ -143,35 +143,34 @@ class Crud_customer extends CI_Model
 	{
 		$this->db->where('rolename',$name);
 		$this->db->where_not_in('role_id',$id);
-		$get = $this->db->get('user_roles')->num_rows();
+		$get = $this->db->get('mypos.t_user_roles')->num_rows();
 		
 		return $get;
 	}
 	
 	function read_cust()
 	{
-		$this->db->where('hasBusiness','0')
-				 ->where('password !=', '');
+		$this->db->where('password !=', '');
 				 //->where('login_state','1');
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->result();
 	}
 	
 	function src_cust($id)
 	{
-		$this->db->where('hasBusiness','0');
+		//$this->db->where('hasBusiness','0');
 		$this->db->where('status',$id);
 				 //->where('login_state','1');
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->result();
 	}
 	
 	function get_cust($id)
 	{
-		$this->db->where('customers_id',$id);
-		$get = $this->db->get('customers');
+		$this->db->where('mypos.t_pelanggan_id',$id);
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->result();
 	}
@@ -188,7 +187,7 @@ class Crud_customer extends CI_Model
 	function get_data_customer($email)
 	{
 		$this->db->select('*')
-				 ->from('customers')
+				 ->from('mypos.t_pelanggan')
 				 ->where('email',$email);
 		$get = $this->db->get();
 		print_r ($get);
@@ -198,25 +197,25 @@ class Crud_customer extends CI_Model
 	function non_aktif($id)
 	{
 		$data['status'] = 0;
-		$this->db->where('customers_id',$id);
-		$this->db->update('customers',$data);
+		$this->db->where('mypos.t_pelanggan_id',$id);
+		$this->db->update('mypos.t_pelanggan',$data);
 	}
 	
 	function aktif($id)
 	{
 		$data['status'] = 1;
-		$this->db->where('customers_id',$id);
-		$this->db->update('customers',$data);
+		$this->db->where('mypos.t_pelanggan_id',$id);
+		$this->db->update('mypos.t_pelanggan',$data);
 	}
 	
 	//LEAD CUSTOMERS
 	function get_lead()
 	{
-		$this->db->select('customers.nama as cust_name, person_pickup.nama as pickup_name, person_pickup.alamat as almt_pickup, person_delivery.nama as name_dlv, person_delivery.alamat as almt_dlv, person_pickup.no_hp as phone1, person_delivery.no_hp as phone2,orders.order_id,customers.customers_id')
-				 ->from('customers')
-				 ->join('orders','orders.customers_id = customers.customers_id')
-				 ->join('person_pickup','person_pickup.email_pickup = orders.email_pickup')
-				 ->join('person_delivery','person_delivery.email_delivery = orders.email_delivery');
+		$this->db->select('mypos.t_pelanggan.nama as cust_name, person_pickup.nama as pickup_name, person_pickup.alamat as almt_pickup, person_delivery.nama as name_dlv, person_delivery.alamat as almt_dlv, person_pickup.no_hp as phone1, person_delivery.no_hp as phone2,mypos.t_transaksi_order.order_id,mypos.t_pelanggan.mypos.t_pelanggan_id')
+				 ->from('mypos.t_pelanggan')
+				 ->join('mypos.t_transaksi_order','mypos.t_transaksi_order.mypos.t_pelanggan_id = mypos.t_pelanggan.mypos.t_pelanggan_id')
+				 ->join('person_pickup','person_pickup.email_pickup = mypos.t_transaksi_order.email_pickup')
+				 ->join('person_delivery','person_delivery.email_delivery = mypos.t_transaksi_order.email_delivery');
 		$get = $this->db->get();
 		
 		return $get;
@@ -224,8 +223,8 @@ class Crud_customer extends CI_Model
 	
 	function get_detail($id)
 	{
-		$this->db->where('customers_id',$id);
-		$get = $this->db->get('customers');
+		$this->db->where('mypos.t_pelanggan_id',$id);
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		if($get->num_rows() > 0)
 		{

@@ -27,7 +27,7 @@ class Mcrud_courier extends CI_Model
     
     function get_login($email)//done
     {
-        $sql = "select login_state from couriers where email = '".$email."'";
+        $sql = "select login_state from mypos.t_master_kurir where email = '".$email."'";
         $query = $this->db->query($sql);
         $row = $query->row_array();
         //echo $row['status'];
@@ -36,13 +36,13 @@ class Mcrud_courier extends CI_Model
     
     function logged_out($email)//done
     {
-        $sql = "UPDATE couriers SET login_state = '0' WHERE email = '".$email."'";
+        $sql = "UPDATE mypos.t_master_kurir SET login_state = '0' WHERE email = '".$email."'";
         $this->db->query($sql);
     }
     
     function logged_in($email)//done
     {
-        $sql = "UPDATE couriers SET login_state = '1' WHERE email = '".$email."'";
+        $sql = "UPDATE mypos.t_master_kurir SET login_state = '1' WHERE email = '".$email."'";
         $this->db->query($sql);
     }
 	
@@ -74,14 +74,14 @@ class Mcrud_courier extends CI_Model
 		if(filter_var($user,FILTER_VALIDATE_EMAIL) == FALSE)
 		{
 			$this->db->select('*')
-					 ->from('couriers')
+					 ->from('mypos.t_master_kurir')
 					 ->where('password',md5($pass))
 					 ->where('username',$user);
 		}
 		else
 		{
 			$this->db->select('*')
-					 ->from('couriers')
+					 ->from('mypos.t_master_kurir')
 					 ->where('password',md5($pass))
 					 ->where('email',$user);
 		}
@@ -99,7 +99,7 @@ class Mcrud_courier extends CI_Model
 	function get_data_courier($email)//done
 	{
 		$this->db->select('*')
-				 ->from('couriers')
+				 ->from('mypos.t_master_kurir')
 				 ->where('email',$email);
 		$get = $this->db->get();
 		return $get->row();
@@ -109,7 +109,7 @@ class Mcrud_courier extends CI_Model
     function look_email($email)
 	{
 		$this->db->where('email',$email);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}
@@ -118,7 +118,7 @@ class Mcrud_courier extends CI_Model
 	{
 		$this->db->where('password',md5($password))
                  ->where('email', $email);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}

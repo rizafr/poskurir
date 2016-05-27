@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of usersModel
+ * Description of mypos.t_userModel
  *
  * @author Temmy Rustandi Hidayat
  */
@@ -31,13 +31,13 @@ class Crud_courier extends CI_Model
 		if($id == 1)
 		{
 			$this->db->where_not_in('password',array(md5(0)));
-			$get = $this->db->get('couriers');
+			$get = $this->db->get('mypos.t_master_kurir');
 		}
 		else
 		{
 			$this->db->where('password',md5(0));
 			$this->db->where('login_state','0');
-			$get = $this->db->get('couriers');
+			$get = $this->db->get('mypos.t_master_kurir');
 		}
 		
 		return $get->result();
@@ -51,7 +51,7 @@ class Crud_courier extends CI_Model
 	function look($post,$triger)
 	{
 		$this->db->where($triger,$post);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}
@@ -60,7 +60,7 @@ class Crud_courier extends CI_Model
 	{
 		$this->db->where($triger,$post);
 		$this->db->where_not_in('courier_id',$id);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}
@@ -88,13 +88,13 @@ class Crud_courier extends CI_Model
 	function non_aktif($id,$data)
 	{
 		$this->db->where('courier_id',$id);
-		$this->db->update('couriers',$data);
+		$this->db->update('mypos.t_master_kurir',$data);
 	}
 	
 	function aktif($id,$data)
 	{
 		$this->db->where('courier_id',$id);
-		$this->db->update('couriers',$data);
+		$this->db->update('mypos.t_master_kurir',$data);
 	}
 
 }

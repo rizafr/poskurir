@@ -35,7 +35,28 @@
 			}
 			?>
 
-			<br>
+		<br>
+			<div align="right">
+			<form class="form-inline" role="form" name='form_search' action="<?php echo base_url(); ?>users/search" method="post">
+			  <div class="form-group">
+				  <!--select class="form-control m-bot15" name='cabang' onchange="this.form.submit()">
+					  <option value=" " <?php echo (!isset($stat) ? 'selected' : '' ); ?>>Status</option>
+					  <option value="1" <?php echo (isset($stat) ? ($stat == '1' ? 'selected' : '') : '' ); ?>>Aktif</option>
+					  <option value="0" <?php echo (isset($stat) ? ($stat == '0' ? 'selected' : '' ) : '' ); ?>>Non Aktif</option>
+				 </select-->
+
+				  <select class="form-control m-bot15" name='cabang' onchange="this.form.submit()">
+							  <option value=''>Pilih</option>
+							  <?php
+							  foreach($cabang as $data2)
+							  {
+								echo "<option value='$data2->id_grup' ".(isset($edit) ? ($get->id_grup == $data2->id_grup ? 'selected' : '') : '')." >$data2->nama_grup</option>";
+							  }
+							 ?>
+				   </select>
+			  </div>
+			</form>
+			</div>
 		<a class="btn btn-primary" href="<?php echo base_url("users/add_user"); ?>"><i class="icon_plus_alt2"></i> Tambah Admin</a>
 			<table id='bootstrap-table' class="table table-bordered table-striped table-advance table-hover">
 				<thead>
@@ -45,7 +66,8 @@
 						<th>Email</th>
 						<th>Nama</th>
 						<th>Admin Role</th>
-						<th>Status</th>
+						<th>Nama Grup</th>
+                        <th>Status</th>
                         <th><i class="icon_cogs"></i> Aksi</th>
 					</tr>
 				</thead>
@@ -59,8 +81,9 @@
 						<td>'.$no.'</td>
 						<td>'.$data->username.'</td>
 						<td>'.$data->email.'</td>
-						<td>'.$data->name.'</td>
+						<td>'.$data->nama.'</td>
 						<td>'.$data->rolename.'</td>
+						<td>'.$data->nama_grup.'</td>
 						<td>'.($data->status == 0 ? 'Non Aktif' : 'Aktif').'</td>
 						<td>
 						  <div class="btn-group">

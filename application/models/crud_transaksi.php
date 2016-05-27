@@ -21,15 +21,15 @@ class Crud_transaksi extends CI_Model
 	
 	function read_cust()
 	{
-		$this->db->select('orders.order_id,tarif.harga,count(couriers.courier_id) as transaksi,couriers.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,count(mypos.t_master_kurir.courier_id) as transaksi,mypos.t_master_kurir.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 //->where_in('order_logs.status_delv_id',array('10','7','8'))
 			 ->where_in('order_logs.status_delv_id','10')
-			 ->group_by('couriers.courier_id');
+			 ->group_by('mypos.t_master_kurir.courier_id');
 		$get = $this->db->get();
 		
 		return $get;
@@ -37,15 +37,15 @@ class Crud_transaksi extends CI_Model
 	
 	function read_cust2()
 	{
-		$this->db->select('orders.order_id,tarif.harga,count(couriers.courier_id) as transaksi,couriers.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,count(mypos.t_master_kurir.courier_id) as transaksi,mypos.t_master_kurir.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 //->where_in('order_logs.status_delv_id',array('10','7','8'))
 			 ->where_in('order_logs.status_delv_id',array('4','5','6','7','8'))
-			 ->group_by('couriers.courier_id');
+			 ->group_by('mypos.t_master_kurir.courier_id');
 		$get = $this->db->get();
 		
 		return $get;
@@ -53,12 +53,12 @@ class Crud_transaksi extends CI_Model
 	
 	function get_post($trig,$cust,$from,$till)
 	{
-		$this->db->select('orders.order_id,tarif.harga,customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 ->where($trig,$cust)
 			 ->where('order_logs.timestamp >=', $from)
 			 ->where('order_logs.timestamp <=', $till)
@@ -71,17 +71,17 @@ class Crud_transaksi extends CI_Model
 	
 	function get_transaksi($from,$till)
 	{
-		$this->db->select('orders.order_id,tarif.harga,count(couriers.courier_id) as transaksi,couriers.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,count(mypos.t_master_kurir.courier_id) as transaksi,mypos.t_master_kurir.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 ->where('order_logs.timestamp >=', $from)
 			 ->where('order_logs.timestamp <=', $till)
 			 //->where_in('order_logs.status_delv_id',array('10','7','8'))
              ->where('order_logs.status_delv_id','10')
-			 ->group_by('couriers.courier_id');
+			 ->group_by('mypos.t_master_kurir.courier_id');
 		$get = $this->db->get();
 		
 		return $get;
@@ -90,11 +90,11 @@ class Crud_transaksi extends CI_Model
 	function get_trans($from,$till)
 	{
 		/*contoh 1
-		$this->db->select('transaksi.courier_id,couriers.nama as curs_name, sum(tarif.harga) as harga, count(transaksi.courier_id) as transaksi')
+		$this->db->select('transaksi.courier_id,mypos.t_master_kurir.nama as curs_name, sum(tarif.harga) as harga, count(transaksi.courier_id) as transaksi')
 				 ->from('transaksi')
-				 ->join('orders','orders.order_id = transaksi.order_id')
+				 ->join('mypos.t_transaksi_order','mypos.t_transaksi_order.order_id = transaksi.order_id')
 				 ->join('order_logs','order_logs.order_id = transaksi.order_id')
-				 ->join('couriers','couriers.courier_id = transaksi.courier_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = transaksi.courier_id')
 				 ->join('tarif','tarif.tarif_id = transaksi.tarif_id')
 				 ->where('transaksi.status_bayar','1')
 				 ->where('order_logs.timestamp >=', $from)
@@ -106,17 +106,17 @@ class Crud_transaksi extends CI_Model
 		return $get;
 		*/
 		
-		$this->db->select('count(transaksi.courier_id) as transaksi,couriers.nama as curs_name, sum(tarif.harga) as harga')
-				 ->from('transaksi')
-				 ->join('orders','orders.order_id = transaksi.order_id')
-				 ->join('couriers','couriers.courier_id = transaksi.courier_id')
-				 ->join('tarif','tarif.tarif_id = transaksi.tarif_id')
-				 ->join('order_logs','order_logs.order_id = transaksi.order_id')
-				 ->where('transaksi.status_bayar','1')
+		$this->db->select('count(mypos.t_setoran.courier_id) as transaksi,mypos.t_master_kurir.nama as curs_name, sum(mypos.tr_tarif.harga) as harga')
+				 ->from('mypos.t_setoran')
+				 ->join('mypos.t_transaksi_order','mypos.t_transaksi_order.order_id = mypos.t_setoran.order_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_setoran.courier_id')
+				 ->join('mypos.tr_tarif','mypos.tr_tarif.tarif_id = mypos.t_setoran.tarif_id')
+				 ->join('order_logs','order_logs.order_id = mypos.t_setoran.order_id')
+				 ->where('mypos.t_setoran.status_bayar','1')
 				 ->where('order_logs.status_delv_id','10')
 				 ->where('order_logs.timestamp >=', $from)
 				 ->where('order_logs.timestamp <=', $till)
-				 ->group_by('transaksi.courier_id');
+				 ->group_by('mypos.t_setoran.courier_id');
 			 
 		$get = $this->db->get();
 		
@@ -125,13 +125,13 @@ class Crud_transaksi extends CI_Model
 	
 	function get_trans2()
 	{
-		$this->db->select('count(transaksi.courier_id) as transaksi,couriers.nama as curs_name, sum(tarif.harga) as harga')
-				 ->from('transaksi')
-				 ->join('orders','orders.order_id = transaksi.order_id')
-				 ->join('couriers','couriers.courier_id = transaksi.courier_id')
-				 ->join('tarif','tarif.tarif_id = transaksi.tarif_id')
-				 ->where('transaksi.status_bayar','1')
-				 ->group_by('transaksi.courier_id');
+		$this->db->select('count(mypos.t_setoran.courier_id) as transaksi,mypos.t_master_kurir.nama as curs_name, sum(mypos.tr_tarif.harga) as harga')
+				 ->from('mypos.t_setoran')
+				 ->join('mypos.t_transaksi_order','mypos.t_transaksi_order.order_id = mypos.t_setoran.order_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_setoran.courier_id')
+				 ->join('mypos.tr_tarif','mypos.tr_tarif.tarif_id = mypos.t_setoran.tarif_id')
+				 ->where('mypos.t_setoran.status_bayar','1')
+				 ->group_by('mypos.t_setoran.courier_id');
 			 
 		$get = $this->db->get();
 		
@@ -140,17 +140,17 @@ class Crud_transaksi extends CI_Model
 	
 	function get_transaksi2($from,$till)
 	{
-		$this->db->select('orders.order_id,tarif.harga,count(couriers.courier_id) as transaksi,couriers.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,count(mypos.t_master_kurir.courier_id) as transaksi,mypos.t_master_kurir.courier_id,sum(`tarif`.`harga`) as harga, customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 ->where('order_logs.timestamp >=', $from)
 			 ->where('order_logs.timestamp <=', $till)
 			 //->where_in('order_logs.status_delv_id',array('10','7','8'))
              ->where_in('order_logs.status_delv_id',array('4','5','6','7','8'))
-			 ->group_by('couriers.courier_id');
+			 ->group_by('mypos.t_master_kurir.courier_id');
 		$get = $this->db->get();
 		
 		return $get;
@@ -158,12 +158,12 @@ class Crud_transaksi extends CI_Model
 	
 	function get_date($from,$till)
 	{
-		$this->db->select('orders.order_id,tarif.harga,customers.nama as cust_name, couriers.nama as curs_name, customers.email as cust_email, couriers.email as curs_email, order_logs.timestamp as date')
-			 ->from('orders')
-			 ->join('order_logs','order_logs.order_id = orders.order_id')
-			 ->join('customers','customers.customers_id = orders.customers_id')
-			 ->join('couriers','couriers.courier_id = orders.courier_id')
-			 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, order_logs.timestamp as date')
+			 ->from('mypos.t_transaksi_order')
+			 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+			 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+			 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 			 ->where('order_logs.timestamp >=', $from)
 			 ->where('order_logs.timestamp <=', $till)
 			 ->where('order_logs.status_delv_id','10')
@@ -176,21 +176,21 @@ class Crud_transaksi extends CI_Model
 	function get_kurir($id)
 	{
 		$this->db->where('courier_id',$id);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return current($get->result());
 	}
 	
 	function read_bill($id)
 	{
-		$this->db->select('orders.order_id,tarif.harga,tarif.layanan,tarif.tarif_id,customers.nama as cust_name, couriers.nama as curs_name, couriers.courier_id, customers.email as cust_email, couriers.email as curs_email, orders.tarif_id, order_logs.timestamp as date')
-				 ->from('orders')
-				 ->join('order_logs','order_logs.order_id = orders.order_id')
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('couriers','couriers.courier_id = orders.courier_id')
-			     ->join('tarif','tarif.tarif_id = orders.tarif_id')
-				 ->where_in('orders.status_delv_id',array('3','4','5','6','7','8'))
-				 ->where('orders.courier_id',$id)
+		$this->db->select('mypos.t_transaksi_order.order_id,tarif.harga,tarif.layanan,tarif.tarif_id,customers.nama as cust_name, mypos.t_master_kurir.nama as curs_name, mypos.t_master_kurir.courier_id, customers.email as cust_email, mypos.t_master_kurir.email as curs_email, mypos.t_transaksi_order.tarif_id, order_logs.timestamp as date')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+				 ->join('customers','customers.customers_id = mypos.t_transaksi_order.customers_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+			     ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
+				 ->where_in('mypos.t_transaksi_order.status_delv_id',array('3','4','5','6','7','8'))
+				 ->where('mypos.t_transaksi_order.courier_id',$id)
 				 ->group_by('order_logs.order_id');
 		$get = $this->db->get();
 		

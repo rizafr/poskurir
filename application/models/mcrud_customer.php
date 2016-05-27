@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of usersModel
+ * Description of mypos.t_userModel
  *
  * @author Sumapala Technologies
  */
@@ -21,7 +21,7 @@ class Mcrud_customer extends CI_Model
   
     function activate($hash)
     {
-        $sql = "UPDATE customers SET status = '1' WHERE MD5( email ) = '".$hash."'";
+        $sql = "UPDATE mypos.t_pelanggan SET status = '1' WHERE MD5( email ) = '".$hash."'";
         $this->db->query($sql);
     }
 	
@@ -39,7 +39,7 @@ class Mcrud_customer extends CI_Model
     
     function getstatus($hash)
     {
-        $sql = "select status from customers where MD5(email) = '".$hash."'";
+        $sql = "select status from mypos.t_pelanggan where MD5(email) = '".$hash."'";
         $query = $this->db->query($sql);
         $row = $query->row_array();
         //echo $row['status'];
@@ -48,7 +48,7 @@ class Mcrud_customer extends CI_Model
     
     function get_login($email)
     {
-        $sql = "select status from customers where email = '".$email."'";
+        $sql = "select status from mypos.t_pelanggan where email = '".$email."'";
         $query = $this->db->query($sql);
         $row = $query->row_array();
         //echo $row['status'];
@@ -57,13 +57,13 @@ class Mcrud_customer extends CI_Model
     
     function logged_out($email)
     {
-        $sql = "UPDATE customers SET login_state = '0' WHERE email = '".$email."'";
+        $sql = "UPDATE mypos.t_pelanggan SET login_state = '0' WHERE email = '".$email."'";
         $this->db->query($sql);
     }
     
     function logged_in($email)
     {
-        $sql = "UPDATE customers SET login_state = '1' WHERE email = '".$email."'";
+        $sql = "UPDATE mypos.t_pelanggan SET login_state = '1' WHERE email = '".$email."'";
         $this->db->query($sql);
     }
 	
@@ -84,7 +84,7 @@ class Mcrud_customer extends CI_Model
 	function look_user($user)
 	{
 		$this->db->where('username',$user);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -93,7 +93,7 @@ class Mcrud_customer extends CI_Model
 	{
 		$this->db->where('username',$user);
 		$this->db->where_not_in('id',$id);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -102,7 +102,7 @@ class Mcrud_customer extends CI_Model
 	{
 		$this->db->where('email',$email)
 				 ->where('password !=','');
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->num_rows();
 	}
@@ -111,7 +111,7 @@ class Mcrud_customer extends CI_Model
 	{
 		$this->db->where('password',md5($password))
                  ->where('email', $email);
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->num_rows();
 	}
@@ -121,7 +121,7 @@ class Mcrud_customer extends CI_Model
     function look_phone($telp)
 	{
 		$this->db->where('telp',$telp);
-		$get = $this->db->get('customers');
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->num_rows();
 	}
@@ -130,7 +130,7 @@ class Mcrud_customer extends CI_Model
 	{
 		$this->db->where('email',$email);
 		$this->db->where_not_in('id',$id);
-		$get = $this->db->get('users');
+		$get = $this->db->get('mypos.t_user');
 		
 		return $get->num_rows();
 	}
@@ -144,7 +144,7 @@ class Mcrud_customer extends CI_Model
 	function look_name($name)
 	{
 		$this->db->where('rolename',$name);
-		$get = $this->db->get('user_roles')->num_rows();
+		$get = $this->db->get('mypos.t_user_roles')->num_rows();
 		
 		return $get;
 	}
@@ -154,14 +154,14 @@ class Mcrud_customer extends CI_Model
 		if(filter_var($user,FILTER_VALIDATE_EMAIL) == FALSE)
 		{
 			$this->db->select('*')
-					 ->from('customers')
+					 ->from('mypos.t_pelanggan')
 					 ->where('password',md5($pass))
 					 ->where('username',$user);
 		}
 		else
 		{
 			$this->db->select('*')
-					 ->from('customers')
+					 ->from('mypos.t_pelanggan')
 					 ->where('password',md5($pass))
 					 ->where('email',$user);
 		}
@@ -178,8 +178,8 @@ class Mcrud_customer extends CI_Model
 	
 	function get_cust($id)
 	{
-		$this->db->where('customers_id',$id);
-		$get = $this->db->get('customers');
+		$this->db->where('mypos.t_pelanggan_id',$id);
+		$get = $this->db->get('mypos.t_pelanggan');
 		
 		return $get->result();
 	}
@@ -197,7 +197,7 @@ class Mcrud_customer extends CI_Model
 	function get_data_customer($email)
 	{
 		$this->db->select('*')
-				 ->from('customers')
+				 ->from('mypos.t_pelanggan')
 				 ->where('email',$email);
 		$get = $this->db->get();
 		return $get->row();

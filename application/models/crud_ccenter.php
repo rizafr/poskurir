@@ -34,7 +34,7 @@ class Crud_ccenter extends CI_Model
 	function look($post,$triger)
 	{
 		$this->db->where($triger,$post);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}
@@ -43,7 +43,7 @@ class Crud_ccenter extends CI_Model
 	{
 		$this->db->where($triger,$post);
 		$this->db->where_not_in('courier_id',$id);
-		$get = $this->db->get('couriers');
+		$get = $this->db->get('mypos.t_master_kurir');
 		
 		return $get->num_rows();
 	}
@@ -70,13 +70,13 @@ class Crud_ccenter extends CI_Model
 	
 	function get_data()
 	{
-		$this->db->select('orders.status_delv_id,order_logs.timestamp,orders.order_id,customers.nama,orders.tgl_kirim,orders.detail_barang,tarif.layanan,orders.courier_id')
-				 ->from('orders')
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.status_delv_id,order_logs.timestamp,mypos.t_transaksi_order.order_id,mypos.t_pelanggan.nama,mypos.t_transaksi_order.tgl_kirim,mypos.t_transaksi_order.detail_barang,tarif.layanan,mypos.t_transaksi_order.courier_id')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 				 ->join('(SELECT MAX(timestamp) AS timestamp,order_id
 						FROM order_logs
-						GROUP BY order_id) order_logs','order_logs.order_id = orders.order_id')
+						GROUP BY order_id) order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
 				 ->order_by('order_logs.timestamp','desc');
 		$get = $this->db->get();
 		
@@ -85,14 +85,14 @@ class Crud_ccenter extends CI_Model
 	
 	function get_src($data)
 	{
-		$this->db->select('orders.status_delv_id,order_logs.timestamp,orders.order_id,customers.nama,orders.tgl_kirim,orders.detail_barang,tarif.layanan,orders.courier_id')
-				 ->from('orders')
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('tarif','tarif.tarif_id = orders.tarif_id')
+		$this->db->select('mypos.t_transaksi_order.status_delv_id,order_logs.timestamp,mypos.t_transaksi_order.order_id,mypos.t_pelanggan.nama,mypos.t_transaksi_order.tgl_kirim,mypos.t_transaksi_order.detail_barang,tarif.layanan,mypos.t_transaksi_order.courier_id')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id')
 				 ->join('(SELECT MAX(timestamp) AS timestamp,order_id
 						FROM order_logs
-						GROUP BY order_id) order_logs','order_logs.order_id = orders.order_id')
-				 ->where('orders.status_delv_id',$data)
+						GROUP BY order_id) order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+				 ->where('mypos.t_transaksi_order.status_delv_id',$data)
 				 ->order_by('order_logs.timestamp','desc');
 		$get = $this->db->get();
 		
@@ -101,9 +101,9 @@ class Crud_ccenter extends CI_Model
 	
 	function get_longlat()
 	{
-		$this->db->select('orders.*,max(order_logs.timestamp) as timestamp')
-				 ->from('orders')
-				 ->join('order_logs','order_logs.order_id = orders.order_id');
+		$this->db->select('mypos.t_transaksi_order.*,max(order_logs.timestamp) as timestamp')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id');
 		$get = $this->db->get();
 		
 		return $get->result();
@@ -111,12 +111,12 @@ class Crud_ccenter extends CI_Model
 	
 	function longlat_pickup()
 	{
-		/*$get = $this->db->query('select b.order_id, b.customers_id, b.longlat_pickup, b.longlat_delivery, max(b.date) from (SELECT `orders`.*, max(order_logs.`timestamp`) as `date` 
-FROM (`orders`)
-JOIN order_logs on order_logs.order_id = orders.order_id
+		/*$get = $this->db->query('select b.order_id, b.mypos.t_pelanggan_id, b.longlat_pickup, b.longlat_delivery, max(b.date) from (SELECT `mypos.t_transaksi_order`.*, max(order_logs.`timestamp`) as `date` 
+FROM (`mypos.t_transaksi_order`)
+JOIN order_logs on order_logs.order_id = mypos.t_transaksi_order.order_id
 GROUP BY order_id) as b');*/
 
-		$get = $this->db->query('select * from couriers ORDER BY courier_id ASC limit 0,1');
+		$get = $this->db->query('select * from mypos.t_master_kurir ORDER BY courier_id ASC limit 0,1');
 		
 		if($get->num_rows() > 0)
 		{
@@ -128,12 +128,12 @@ GROUP BY order_id) as b');*/
 		}
 	}
 	
-	function get_orders()
+	function get_mypos.t_transaksi_order()
 	{
-		$this->db->select('orders.*,customers.nama as pickup_name')
-				 ->from('orders')
-				 ->where('orders.status_delv_id','0')
-				 ->join('customers','customers.telp = orders.telp_pickup');
+		$this->db->select('mypos.t_transaksi_order.*,mypos.t_pelanggan.nama as pickup_name')
+				 ->from('mypos.t_transaksi_order')
+				 ->where('mypos.t_transaksi_order.status_delv_id','0')
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.telp = mypos.t_transaksi_order.telp_pickup');
 		$get = $this->db->get();
 		
 		if($get->num_rows() > 0)
@@ -146,18 +146,18 @@ GROUP BY order_id) as b');*/
 		}
 	}
 	
-	function get_couriers($id = '')
+	function get_mypos.t_master_kurir($id = '')
 	{
 		if($id == '')
 		{
 			$this->db->where('login_state','1');
-			$get = $this->db->get('couriers');
+			$get = $this->db->get('mypos.t_master_kurir');
 		}
 		else
 		{
 			$this->db->where('login_state','1')
 					 ->where_not_in('courier_id',$id);
-			$get = $this->db->get('couriers');
+			$get = $this->db->get('mypos.t_master_kurir');
 		}
 			
 		return $get->result();
@@ -165,16 +165,16 @@ GROUP BY order_id) as b');*/
 	
 	function get_kurir()
 	{
-		$this->db->select('orders.status_delv_id, orders.order_id, orders.status_assign, couriers.*')
-				 ->from('couriers')
+		$this->db->select('mypos.t_transaksi_order.status_delv_id, mypos.t_transaksi_order.order_id, mypos.t_transaksi_order.status_assign, mypos.t_master_kurir.*')
+				 ->from('mypos.t_master_kurir')
 				 ->where('login_state','1')
 				 ->join('(SELECT status_delv_id, order_id, courier_id, status_assign
-FROM orders
+FROM mypos.t_transaksi_order
 WHERE tgl_kirim
 IN (SELECT MAX( tgl_kirim ) AS DATE
-FROM orders
+FROM mypos.t_transaksi_order
 GROUP BY courier_id
-) group by courier_id) as orders','orders.courier_id = couriers.courier_id','left');
+) group by courier_id) as mypos.t_transaksi_order','mypos.t_transaksi_order.courier_id = mypos.t_master_kurir.courier_id','left');
 		
 		$get = $this->db->get();
 		
@@ -190,12 +190,12 @@ GROUP BY courier_id
 	
 	function order_detail($id)
 	{
-		$this->db->select('orders.*,customers.nama as cust_name, couriers.nama as curs_name, tarif.layanan, tarif.harga')
-				 ->from('orders')
-				 ->where('orders.order_id',$id)
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('couriers','couriers.courier_id = orders.courier_id')
-				 ->join('tarif','tarif.tarif_id = orders.tarif_id');
+		$this->db->select('mypos.t_transaksi_order.*,mypos.t_pelanggan.nama as cust_name, mypos.t_master_kurir.nama as curs_name, tarif.layanan, tarif.harga')
+				 ->from('mypos.t_transaksi_order')
+				 ->where('mypos.t_transaksi_order.order_id',$id)
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+				 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id');
 		
 		$get = $this->db->get();
 		
@@ -205,7 +205,7 @@ GROUP BY courier_id
 	function get_delivery($data)
 	{
 		$this->db->select('*')
-				 ->from('customers')
+				 ->from('mypos.t_pelanggan')
 				 ->where('email',$data);
 		
 		$get = $this->db->get();
@@ -222,11 +222,11 @@ GROUP BY courier_id
 	
 	function get_detail($id)
 	{
-		$this->db->select('orders.*,customers.nama as cust_name,tarif.layanan, tarif.harga')
-				 ->from('orders')
-				 ->where('orders.order_id',$id)
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('tarif','tarif.tarif_id = orders.tarif_id');
+		$this->db->select('mypos.t_transaksi_order.*,mypos.t_pelanggan.nama as cust_name,tarif.layanan, tarif.harga')
+				 ->from('mypos.t_transaksi_order')
+				 ->where('mypos.t_transaksi_order.order_id',$id)
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('tarif','tarif.tarif_id = mypos.t_transaksi_order.tarif_id');
 		
 		$get = $this->db->get();
 		
@@ -236,7 +236,7 @@ GROUP BY courier_id
 	function get_email($id)
 	{
 		$this->db->select('*')
-				 ->from('couriers')
+				 ->from('mypos.t_master_kurir')
 				 ->where('courier_id',$id);
 		
 		$get = $this->db->get();
@@ -244,13 +244,13 @@ GROUP BY courier_id
 		return $get->result();
 	}
 	
-	function logs_customers()
+	function logs_mypos.t_pelanggan()
 	{
-		$this->db->select('customers.nama, customers.email, orders.*, order_logs.timestamp')
-				 ->from('orders')
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('order_logs','order_logs.order_id = orders.order_id')
-				 ->group_by('orders.order_id')
+		$this->db->select('mypos.t_pelanggan.nama, mypos.t_pelanggan.email, mypos.t_transaksi_order.*, order_logs.timestamp')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+				 ->group_by('mypos.t_transaksi_order.order_id')
 				 ->order_by('order_logs.timestamp','desc');
 		
 		$get = $this->db->get();
@@ -265,13 +265,13 @@ GROUP BY courier_id
 		}
 	}
 	
-	function logs_couriers()
+	function logs_mypos.t_master_kurir()
 	{
-		$this->db->select('couriers.nama, couriers.email, orders.*, order_logs.timestamp')
-				 ->from('orders')
-				 ->join('couriers','couriers.courier_id = orders.courier_id')
-				 ->join('order_logs','order_logs.order_id = orders.order_id')
-				 ->group_by('orders.order_id')
+		$this->db->select('mypos.t_master_kurir.nama, mypos.t_master_kurir.email, mypos.t_transaksi_order.*, order_logs.timestamp')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id')
+				 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+				 ->group_by('mypos.t_transaksi_order.order_id')
 				 ->order_by('order_logs.timestamp','desc');
 		
 		$get = $this->db->get();
@@ -288,14 +288,14 @@ GROUP BY courier_id
 	
 	function detail_logs($id)
 	{
-		$this->db->select('customers.nama as cust_name, customer1.nama as pickup_name, couriers.nama as curs_name, customer2.nama as delv_name, order_logs.*, orders.detail_barang')
-				 ->from('orders')
-				 ->join('customers','customers.customers_id = orders.customers_id')
-				 ->join('order_logs','order_logs.order_id = orders.order_id')
-				 ->join('couriers','couriers.courier_id = orders.courier_id','left')
-				 ->join('customers as customer1','customer1.email = orders.email_pickup')
-				 ->join('customers as customer2','customer2.email = orders.email_delivery')
-				 ->where('orders.order_id',$id);
+		$this->db->select('mypos.t_pelanggan.nama as cust_name, customer1.nama as pickup_name, mypos.t_master_kurir.nama as curs_name, customer2.nama as delv_name, order_logs.*, mypos.t_transaksi_order.detail_barang')
+				 ->from('mypos.t_transaksi_order')
+				 ->join('mypos.t_pelanggan','mypos.t_pelanggan.mypos.t_pelanggan_id = mypos.t_transaksi_order.mypos.t_pelanggan_id')
+				 ->join('order_logs','order_logs.order_id = mypos.t_transaksi_order.order_id')
+				 ->join('mypos.t_master_kurir','mypos.t_master_kurir.courier_id = mypos.t_transaksi_order.courier_id','left')
+				 ->join('mypos.t_pelanggan as customer1','customer1.email = mypos.t_transaksi_order.email_pickup')
+				 ->join('mypos.t_pelanggan as customer2','customer2.email = mypos.t_transaksi_order.email_delivery')
+				 ->where('mypos.t_transaksi_order.order_id',$id);
 		
 		$get = $this->db->get();
 		
